@@ -13,7 +13,7 @@ defaultUploadBtn.addEventListener("change", function() {
     if(defaultUploadBtn.value) {
         imageDiv.style.display = "block";
         image.src = URL.createObjectURL(defaultUploadBtn.files[0]);
-        image.style.width = "50%";
+        image.style.width = "75%";
         console.log(imageDiv.style.height);
         customUploadText.innerHTML = defaultUploadBtn.value.split("\\").pop();
     }

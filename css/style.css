@@ -6,14 +6,12 @@ body {
 
 #image-div {
     display: none;
-    position: relative;
 }
 
 #items-div {
     border: 1px dashed blue;
     display: inline-block;
     vertical-align: top;
-    position: absolute;
     padding: 5px;
 }
 
