@@ -1,0 +1,35 @@
+body {
+    text-align: center;
+    background-color:#272727;
+    color: white;
+}
+
+#image-div {
+    display: none;
+    position: relative;
+}
+
+#items-div {
+    border: 1px dashed blue;
+    display: inline-block;
+    vertical-align: top;
+    position: absolute;
+    padding: 5px;
+}
+
+#custom-upload-btn {
+    padding: 10px;
+    color: white;
+    background-color: green;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#custom-upload-btn:hover {
+    background-color: greenyellow;
+}
+
+#custom-upload-text {
+    
+}
