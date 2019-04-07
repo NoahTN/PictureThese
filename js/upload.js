@@ -11,10 +11,11 @@ customUploadBtn.addEventListener("click", function() {
 
 defaultUploadBtn.addEventListener("change", function() {
     if(defaultUploadBtn.value) {
+        // Make image-div visible and display the image
         imageDiv.style.display = "block";
         image.src = URL.createObjectURL(defaultUploadBtn.files[0]);
         image.style.width = "75%";
-        console.log(imageDiv.style.height);
+        // Write the filename to customm-upload-text
         customUploadText.innerHTML = defaultUploadBtn.value.split("\\").pop();
     }
     else {
