@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
         <title>Image Translator</title>
     </head>
     <body>
@@ -29,6 +29,6 @@
         <button type="button" id="custom-upload-btn">Upload File</button>
         <span id="custom-upload-text">No file chosen</span>
 
-        <script src="js/upload.js"></script>
+        <script src={{ url_for('static', filename='js/upload.js') }}></script>
     </body>
 </html>
