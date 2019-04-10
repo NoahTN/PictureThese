@@ -1,1 +1,4 @@
 image_translator.code-workspace
+.idea/
+__pycache__/
+venv/
