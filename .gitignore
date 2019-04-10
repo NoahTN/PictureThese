@@ -2,3 +2,6 @@ image_translator.code-workspace
 .idea/
 __pycache__/
 venv/
+scoobydoo.png
+credentials.json
+test.py
