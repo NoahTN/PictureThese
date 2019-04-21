@@ -10,7 +10,8 @@ from google.cloud.vision import types
 
 app = Flask(__name__)
 
-# Generate credentials
+# Generate credentials 
+# May have to comment out to get to work locally
 credentials_raw = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 service_account_info = json.loads(credentials_raw)
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
@@ -21,7 +22,7 @@ client = vision.ImageAnnotatorClient(credentials=credentials)
 def index():
 	return render_template("index.html")
 
-@app.route('/image', methods = ['GET', 'POST'])
+@app.route('/image', methods = ['POST'])
 def visionAPI ():
 	if request.method == 'POST':
 		f = request.files['file']
