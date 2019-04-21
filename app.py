@@ -12,8 +12,9 @@ def visionAPI ():
 
 	if request.method == 'POST':
 		f = request.files['file']
-		sfname = 'static/images/'+str(secure_filename(f.filename))
-		f.save(sfname)
+		#sfname = 'static/images/'+str(secure_filename(f.filename))
+		#f.save(sfname)
+		content = f.read()
 	
 
 	# Run this in terminal first: export GOOGLE_APPLICATION_CREDENTIALS="C:\cygwin64\home\claud\dev\cst205\project\credentials.json"
@@ -28,12 +29,12 @@ def visionAPI ():
 	client = vision.ImageAnnotatorClient()
 
 	# The name of the image file to annotate
-	file_name = os.path.join(
-	    os.path.dirname(__file__), 'static/images/'+ str(f.filename))
+	#file_name = os.path.join(
+	#    os.path.dirname(__file__), 'static/images/'+ str(f.filename))
 
 	# Loads the image into memory
-	with io.open(file_name, 'rb') as image_file:
-	    content = image_file.read()
+	#with io.open(file_name, 'rb') as image_file:
+	#    content = image_file.read()
 	
 	image = types.Image(content=content)
 
@@ -54,7 +55,6 @@ def visionAPI ():
 		labelStr += label.description
 
 	#return render_template("index.html")
-	
 	return labelStr
 
 if __name__=='__main__':
