@@ -1,7 +1,13 @@
+
+import io
+import os
 from flask import Flask, render_template, request
 from werkzeug import secure_filename
+from google.cloud import vision
+from google.cloud.vision import types
 
 app = Flask(__name__)
+client = vision.ImageAnnotatorClient()
 
 @app.route('/')
 def index():
@@ -9,23 +15,10 @@ def index():
 
 @app.route('/image', methods = ['GET', 'POST'])
 def visionAPI ():
-
 	if request.method == 'POST':
 		f = request.files['file']
 		sfname = 'static/images/'+str(secure_filename(f.filename))
 		f.save(sfname)
-	
-
-	# Run this in terminal first: export GOOGLE_APPLICATION_CREDENTIALS="C:\cygwin64\home\claud\dev\cst205\project\credentials.json"
-	import io
-	import os
-
-	# Imports the Google Cloud client library
-	from google.cloud import vision
-	from google.cloud.vision import types
-
-	# Instantiates a client
-	client = vision.ImageAnnotatorClient()
 
 	# The name of the image file to annotate
 	file_name = os.path.join(
