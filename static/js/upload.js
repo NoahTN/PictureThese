@@ -3,8 +3,8 @@ const customUploadBtn = document.getElementById("custom-upload-btn");
 const customUploadText = document.getElementById("custom-upload-text");
 const imageDiv = document.getElementById("image-div");
 const image = document.getElementById("uploaded-img");
-const imageSrc = document.getElementById("img-src");
 const itemsDiv = document.getElementById("items-div");
+const uploadForm = document.getElementById("upload-form");
 
 customUploadBtn.addEventListener("click", function() {
     defaultUploadBtn.click();
@@ -15,10 +15,11 @@ defaultUploadBtn.addEventListener("change", function() {
         // Make image-div visible and display the image
         imageDiv.style.display = "block";
         image.src = URL.createObjectURL(defaultUploadBtn.files[0]);
-        imageSrc.innerHTML = image.src;
         image.style.width = "75%";
         // Write the filename to customm-upload-text
         customUploadText.innerHTML = defaultUploadBtn.value.split("\\").pop();
+        // Submit form
+        uploadForm.submit();
     }
     else {
         customUploadText.innerHTML = "No file chosen";
