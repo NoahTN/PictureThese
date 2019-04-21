@@ -26,8 +26,8 @@
         </div>
         <!--File Upload Button-->
         <form id="upload-form" action='/image' method="POST" enctype = "multipart/form-data">
-            <input type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
-            <button name="file" type="button" id="custom-upload-btn">Upload File</button>
+            <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
+            <button type="button" id="custom-upload-btn">Upload File</button>
         </form>
         <span id="custom-upload-text">No file chosen</span>
 
