@@ -1,7 +1,7 @@
 import io
 import os
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, jsonify
 from werkzeug import secure_filename
 from google.oauth2 import service_account
 from google.cloud import vision
@@ -26,20 +26,18 @@ def visionAPI ():
 	if request.method == 'POST':
 		f = request.files['file']
 		content = f.read()
+		# Reads in image to object
+		image = types.Image(content=content)
+		# Performs label detection on the image object
+		response = client.label_detection(image=image)
+		labels = response.label_annotations
+		# TO IMPLEMENT: return proper json object with keys and values
+		labelStr = ""
+		for label in labels:
+			labelStr += label.description
+		return jsonify(detected=labelStr)
 
-	# Reads in image to object
-	image = types.Image(content=content)
-
-	# Performs label detection on the image object
-	response = client.label_detection(image=image)
-	labels = response.label_annotations
-
-	labelStr = ""
-	for label in labels:
-		labelStr += label.description
-
-	#return render_template("index.html")
-	return labelStr
+	return redirect("/")
 
 if __name__=='__main__':
     app.run()
