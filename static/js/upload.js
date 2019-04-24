@@ -6,7 +6,10 @@ const image = document.getElementById("uploaded-img");
 const itemsDiv = document.getElementById("items-div");
 const uploadForm = document.getElementById("upload-form");
 
+
+
 customUploadBtn.addEventListener("click", function() {
+    defaultUploadBtn.value = "";
     defaultUploadBtn.click();
 });
 
