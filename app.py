@@ -1,7 +1,7 @@
 import io
 import os
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, jsonify
 from werkzeug import secure_filename
 from google.oauth2 import service_account
 from google.cloud import vision
@@ -51,8 +51,9 @@ def vision_api():
 	response = client.label_detection(image=image)
 	labels = response.label_annotations
 
+	# TODO: return proper json object with keys and values
 	label_str = ""
-	print(translate_api(labels[0].description, "fr"))
+
 	for label in labels:
 		label_str += label.description
 
