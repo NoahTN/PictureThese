@@ -20,8 +20,14 @@
           <!--Select the language to translate to -->
         <div id="lang-div">
             Translate to
-            <select>
-                <option>English</option>
+            <select name="languages">
+                {%  for language in languages %}
+                    {%  if language.name == "English" %}
+                        <option selected value={{ language.language }}> {{ language.name }} </option>
+                    {% else %}
+                         <option value={{ language.language }}> {{ language.name }} </option>
+                    {% endif %}
+                {%  endfor %}
             </select>
         </div>
         <!--File Upload Button-->

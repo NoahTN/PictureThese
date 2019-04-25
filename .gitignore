@@ -6,3 +6,4 @@ scoobydoo.png
 credentials.json
 test.py
 static/images
+.env
