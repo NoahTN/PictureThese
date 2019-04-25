@@ -15,19 +15,19 @@ load_dotenv()
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 '''
-
 app = Flask(__name__)
 
-# Instantiates a vision client
+# Gets credentials
 # May have to comment out to get to work locally
-credentials_raw = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+# credentials_raw = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 credentials_raw = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 service_account_info = json.loads(credentials_raw)
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
-client = vision.ImageAnnotatorClient(credentials=credentials)
 
+# Vision client
+vision_client = vision.ImageAnnotatorClient(credentials=credentials)
 # Translate client
-translate_client = translate.Client()
+translate_client = translate.Client(credentials=credentials)
 
 @app.route('/')
 def index():
@@ -44,7 +44,7 @@ def vision_api():
 	image = types.Image(content=content)
 
 	# Performs label detection on the image object
-	response = client.label_detection(image=image)
+	response = vision_client.label_detection(image=image)
 	labels = response.label_annotations
 
 	# TODO: return proper json object with keys and values
