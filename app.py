@@ -7,6 +7,7 @@ from google.oauth2 import service_account
 from google.cloud import vision
 from google.cloud.vision import types
 from google.cloud import translate
+from google.protobuf.json_format import MessageToJson
 '''
 Pycharm local env
 from pathlib import Path
@@ -25,9 +26,9 @@ service_account_info = json.loads(credentials_raw)
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
 # Vision client
-vision_client = vision.ImageAnnotatorClient(credentials=credentials)
+vision_client = vision.ImageAnnotatorClient()
 # Translate client
-translate_client = translate.Client(credentials=credentials)
+translate_client = translate.Client()
 
 @app.route('/')
 def index():
@@ -39,21 +40,12 @@ def vision_api():
 	if request.method == 'POST':
 		f = request.files['file']
 		content = f.read()
-
 	# Reads in image to object
 	image = types.Image(content=content)
+	# Performs object detection on the image
+	objects = vision_client.object_localization(image=image)
 
-	# Performs label detection on the image object
-	response = vision_client.label_detection(image=image)
-	labels = response.label_annotations
-
-	# TODO: return proper json object with keys and values
-	label_str = ""
-	for label in labels:
-		label_str += label.description
-
-	#return render_template("index.html")
-	return label_str
+	return MessageToJson(objects)
 
 def translate_api(word, translate_to):
 	result = translate_client.translate(word, target_language=translate_to, source_language="en")
