@@ -8,19 +8,18 @@ from google.cloud import vision
 from google.cloud.vision import types
 from google.cloud import translate
 from google.protobuf.json_format import MessageToJson
-'''
-Pycharm local env
-from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path)
-'''
+
+# Pycharm local env
+# from pathlib import Path
+# from dotenv import load_dotenv
+# load_dotenv()
+# env_path = Path('.') / '.env'
+# load_dotenv(dotenv_path=env_path)
+
 app = Flask(__name__)
 
 # Gets credentials
 # May have to comment out to get to work locally
-# credentials_raw = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 credentials_raw = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 service_account_info = json.loads(credentials_raw)
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
