@@ -7,6 +7,7 @@ from google.oauth2 import service_account
 from google.cloud import vision
 from google.cloud.vision import types
 from google.cloud import translate
+from google.protobuf.json_format import MessageToJson
 
 # Pycharm local env
 # from pathlib import Path
