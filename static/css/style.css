@@ -4,6 +4,10 @@ body {
     color: white;
 }
 
+#logo {
+    width: 50%;
+}
+
 #image-div {
     display: none;
 }

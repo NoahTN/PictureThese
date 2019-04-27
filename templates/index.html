@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <title>Image Translator</title>
     </head>
     <body>
-        <h1>INSERT COOL LOGO HERE</h1>
+        <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="site logo"/> 
         <!--Image Display and where the User will interact-->
         <div id="image-div">
             <img id="uploaded-img">
