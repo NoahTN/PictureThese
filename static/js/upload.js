@@ -4,9 +4,8 @@ const customUploadText = document.getElementById("custom-upload-text");
 const imageDiv = document.getElementById("image-div");
 const image = document.getElementById("uploaded-img");
 const itemsDiv = document.getElementById("items-div");
+const itemsList= document.getElementById("items-list");
 const uploadForm = document.getElementById("upload-form");
-const testText = document.getElementById("test-text");
-
 
 
 customUploadBtn.addEventListener("click", function() {
@@ -41,11 +40,20 @@ function makeVisionAPIRequest() {
     xhr.send(formData);
     // Call a function when the state changes.
     xhr.onreadystatechange = function() { 
-        // TO IMPLEMENT: Request Loading
+        // TODO: Request Loading
         
         // Request Finsihed
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            testText.innerHTML = xhr.responseText;
+            console.log(xhr.response);
+            var responseArray = JSON.parse( xhr.response)["localizedObjectAnnotations"];
+            // update list of detected items by creating a new <li> for each
+            itemsList.innerHTML = "";
+            for(var i = 0; i < responseArray.length; ++i) {
+                var item = document.createElement("li");                
+                var itemText = document.createTextNode(responseArray[i]["name"] + " " + Math.round(responseArray[i]["score"] * 100) + "%");         // Create a text node
+                item.appendChild(itemText);                             
+                itemsList.appendChild(item);
+            }
         }
     }
 }
