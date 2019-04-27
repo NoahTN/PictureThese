@@ -26,9 +26,9 @@ service_account_info = json.loads(credentials_raw)
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
 # Vision client
-vision_client = vision.ImageAnnotatorClient()
+vision_client = vision.ImageAnnotatorClient(credentials=credentials)
 # Translate client
-translate_client = translate.Client()
+translate_client = translate.Client(credentials=credentials)
 
 @app.route('/')
 def index():
