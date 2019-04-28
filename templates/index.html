@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <title>Image Translator</title>
     </head>
     <body>
@@ -10,14 +11,20 @@
         <div id="image-div">
             <img id="uploaded-img">
             <div id="items-div">
+                English
                 <ul id="items-list">
+                </ul>
+                <br/> <br/>
+                <span id="selected-language"></span>
+                <ul id="translated-list">
+
                 </ul>
             </div>
         </div>
           <!--Select the language to translate to -->
         <div id="lang-div">
             Translate to
-            <select name="languages">
+            <select id="languages">
                 {%  for language in languages %}
                     {%  if language.name == "English" %}
                         <option selected value={{ language.language }}> {{ language.name }} </option>

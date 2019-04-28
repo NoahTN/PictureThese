@@ -10,24 +10,24 @@ from google.cloud import translate
 from google.protobuf.json_format import MessageToJson
 
 # Pycharm local env
-# from pathlib import Path
-# from dotenv import load_dotenv
-# load_dotenv()
-# env_path = Path('.') / '.env'
-# load_dotenv(dotenv_path=env_path)
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__)
 
 # Gets credentials
 # May have to comment out to get to work locally
-credentials_raw = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
-service_account_info = json.loads(credentials_raw)
-credentials = service_account.Credentials.from_service_account_info(service_account_info)
+# credentials_raw = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+# service_account_info = json.loads(credentials_raw)
+# credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
 # Vision client
-vision_client = vision.ImageAnnotatorClient(credentials=credentials)
+vision_client = vision.ImageAnnotatorClient()#credentials=credentials)
 # Translate client
-translate_client = translate.Client(credentials=credentials)
+translate_client = translate.Client()#credentials=credentials)
 
 @app.route('/')
 def index():
@@ -46,9 +46,19 @@ def vision_api():
 
 	return MessageToJson(objects)
 
-def translate_api(word, translate_to):
-	result = translate_client.translate(word, target_language=translate_to, source_language="en")
-	return result
+@app.route('/language', methods=['POST'])
+def translate_api():
+	data = request.get_json()
+	language = data["language"]
+	ld = data["words"]
+	translated_words = list()
+
+	for l in ld:
+		translated_words.append(translate_client.translate(l["name"], target_language=language, source_language="en"))
+
+	data["translated"] = translated_words
+
+	return jsonify(status="success", data=data)
 
 if __name__ == '__main__':
 	app.run()
