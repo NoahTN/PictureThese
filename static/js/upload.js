@@ -1,88 +1,75 @@
-const defaultUploadBtn = document.getElementById("default-upload-btn");
-const customUploadBtn = document.getElementById("custom-upload-btn");
-const customUploadText = document.getElementById("custom-upload-text");
-const imageDiv = document.getElementById("image-div");
-const image = document.getElementById("uploaded-img");
-const itemsDiv = document.getElementById("items-div");
-const itemsList= document.getElementById("items-list");
-const uploadForm = document.getElementById("upload-form");
-const translateTo = document.getElementById("languages");
+$(document).ready(function() {
 
-const translatedList = document.getElementById("translated-list");
-const selectedLang = document.getElementById("selected-language");
-let language = "en";
-var responseArray;
+var language = "en";
+var detectedObjects = [];
 
-translateTo.addEventListener("change", function() {
-    language = translateTo.options[translateTo.selectedIndex].value;
-    selectedLang.innerHTML = translateTo.options[translateTo.selectedIndex].text;
+$("#languages").on("change", function() {
+    language = $("#languages option:selected").val();
+    $("#selected-language").html($("#languages option:selected").text());
 
     // make sure that a file has been uploaded before making api call
-    if(defaultUploadBtn.value) {
-        makeTranslateAPIRequest(responseArray);
+    if($("#default-upload-btn").val()) {
+        makeTranslateAPIRequest(detectedObjects);
     }
 });
 
-customUploadBtn.addEventListener("click", function() {
-    defaultUploadBtn.value = "";
-    defaultUploadBtn.click();
+$("#custom-upload-btn").on("click", function() {
+    $("#default-upload-btn").val("");
+    $("#default-upload-btn").click();
 });
 
-defaultUploadBtn.addEventListener("change", function() {
-    if(defaultUploadBtn.value) {
+$("#default-upload-btn").on("change", function() {
+    if($("#default-upload-btn").val()) {
         // Make image-div visible and display the image
-        imageDiv.style.display = "block";
-        image.src = URL.createObjectURL(defaultUploadBtn.files[0]);
-        image.style.width = "75%";
+        $("#image-div").css("display", "block");
+        $("#uploaded-img").attr("src", URL.createObjectURL($("#default-upload-btn").prop("files")[0]));
+        $("#uploaded-img").css("width", "75%");
         // Write the filename to customm-upload-text
-        customUploadText.innerHTML = defaultUploadBtn.value.split("\\").pop();
+        $("#custom-upload-text").html($("#default-upload-btn").val().split("\\").pop());
         // Submit form
         //uploadForm.submit();
         makeVisionAPIRequest();
     }
     else {
-        customUploadText.innerHTML = "No file chosen";
+        $("#custom-upload-text").html("No file chosen");
     }
 });
 
 function makeVisionAPIRequest() {
-    var formData = new FormData(),
-    file = defaultUploadBtn.files[0];
-    xhr = new XMLHttpRequest();
+    var formData = new FormData();
+    formData.append("file", $("#default-upload-btn").prop("files")[0]);
 
-    formData.append('file', file);
-    xhr.open('POST', '/image');
-    xhr.send(formData);
-    // Call a function when the state changes.
-    xhr.onreadystatechange = function() { 
-        // TODO: Request Loading
-        
-        // Request Finsihed
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            // console.log(xhr.response);
-            responseArray = JSON.parse( xhr.response)["localizedObjectAnnotations"];
-
+    $.ajax({
+        type: "POST",
+        url: "/image",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            console.log(response);
+            $("#items-list").html("");
+            response = JSON.parse(response);
+            detectedObjects = response["localizedObjectAnnotations"];
             if(language !== "en") {
-                makeTranslateAPIRequest(responseArray);
+                makeTranslateAPIRequest(detectedObjects);
             }
 
-            // update list of detected items by creating a new <li> for each
-            itemsList.innerHTML = "";
-            for(var i = 0; i < responseArray.length; ++i) {
-                var item = document.createElement("li");                
-                var itemText = document.createTextNode(responseArray[i]["name"] + " " + Math.round(responseArray[i]["score"] * 100) + "%");         // Create a text node
-                item.appendChild(itemText);                             
-                itemsList.appendChild(item);
+            for(var i = 0; i < detectedObjects.length; ++i) {
+                $("#items-list").append("<li>" + detectedObjects[i]["name"] + " " + 
+                                        Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
             }
+        },
+        error: function(err) {
+            console.log(err);
         }
-    }
+    });
 }
 
 function makeTranslateAPIRequest(words) {
     var myData = {
-            "language": language,
-            "words": words
-        };
+        "language": language,
+        "words": words
+    };
 
     $.ajax({
         type: "POST",
@@ -91,17 +78,15 @@ function makeTranslateAPIRequest(words) {
         data: JSON.stringify(myData),
         dataType: "json",
         success: function(response) {
-            console.log(response);
-            translatedList.innerHTML = "";
-            for(var i = 0; i < responseArray.length; ++i) {
-                var item = document.createElement("li");
-                var itemText = document.createTextNode(response["data"]["translated"][i]["translatedText"] + " " + Math.round(response["data"]["words"][i]["score"] * 100) + "%");         // Create a text node
-                item.appendChild(itemText);
-                translatedList.appendChild(item);
+            $("#translated-list").html("");
+            for(var i = 0; i < detectedObjects.length; ++i) {
+                $("#translated-list").append("<li>" + response["data"]["translated"][i]["translatedText"] + " " + 
+                                             Math.round(response["data"]["words"][i]["score"] * 100) + "%</li>");             
             }
         },
         error: function(err) {
             console.log(err);
         }
-});
+    });
 }
+});

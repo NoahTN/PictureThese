@@ -39,26 +39,28 @@ def vision_api():
 	if request.method == 'POST':
 		f = request.files['file']
 		content = f.read()
-	# Reads in image to object
-	image = types.Image(content=content)
-	# Performs object detection on the image
-	objects = vision_client.object_localization(image=image)
+		# Reads in image to object
+		image = types.Image(content=content)
+		# Performs object detection on the image
+		objects = vision_client.object_localization(image=image)
 
-	return MessageToJson(objects)
+		return MessageToJson(objects)
+	return redirect("/")
 
 @app.route('/language', methods=['POST'])
 def translate_api():
-	data = request.get_json()
-	language = data["language"]
-	ld = data["words"]
-	translated_words = list()
+	if request.method == 'POST':
+		data = request.get_json()
+		language = data["language"]
+		ld = data["words"]
+		translated_words = list()
 
-	for l in ld:
-		translated_words.append(translate_client.translate(l["name"], target_language=language, source_language="en"))
+		for l in ld:
+			translated_words.append(translate_client.translate(l["name"], target_language=language, source_language="en"))
 
-	data["translated"] = translated_words
+		data["translated"] = translated_words
 
-	return jsonify(status="success", data=data)
-
+		return jsonify(status="success", data=data)
+	return redirect("/")
 if __name__ == '__main__':
 	app.run()

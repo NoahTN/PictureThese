@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src={{ url_for('static', filename='js/upload.js') }}></script>
         <title>Image Translator</title>
     </head>
     <body>
@@ -12,13 +13,10 @@
             <img id="uploaded-img">
             <div id="items-div">
                 English
-                <ul id="items-list">
-                </ul>
-                <br/> <br/>
+                <ul id="items-list"></ul>
+                <br/><br/>
                 <span id="selected-language"></span>
-                <ul id="translated-list">
-
-                </ul>
+                <ul id="translated-list"></ul>
             </div>
         </div>
           <!--Select the language to translate to -->
@@ -40,7 +38,7 @@
             <button type="button" id="custom-upload-btn">Upload File</button>
         </form>
         <span id="custom-upload-text">No file chosen</span>
-        <script src={{ url_for('static', filename='js/upload.js') }}></script>
+
 
     </body>
 </html>
