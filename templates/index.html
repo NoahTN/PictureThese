@@ -8,6 +8,8 @@
         <h1>INSERT COOL LOGO HERE</h1>
         <!--Image Display and where the User will interact-->
         <div id="image-div">
+            <!--Next Line is the New Image-->
+            <img src="data:image/png">
             <img id="uploaded-img">
             <div id="items-div">
                 <ul>
@@ -25,20 +27,12 @@
             </select>
         </div>
         <!--File Upload Button-->
-        <form action='http://localhost:5000/image' method="POST" enctype = "multipart/form-data">
-            <!--<input type="file" id="default-upload-btn" accept="image/*" hidden="hidden" name="file"/>
-            <button type="button" id="custom-upload-btn">Upload File</button>-->
-            <input type = "file" name = "file" />
-            <input type = "submit"/>
+        <form id="upload-form" action='/image' method="POST" enctype = "multipart/form-data">
+            <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
+            <button type="button" id="custom-upload-btn">Upload File</button>
         </form>
-        <!--
         <span id="custom-upload-text">No file chosen</span>
-
-        <span id="img-src" name="img-src">Test2</span>
-        -->
-
+        <!--<p id="test-text"></p>-->
         <script src={{ url_for('static', filename='js/upload.js') }}></script>
-        <!--<a href="{{url_for('visionAPI')}}" methods='POST'>Test</a>-->
-
     </body>
 </html>
