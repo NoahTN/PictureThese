@@ -18,7 +18,6 @@ from google.protobuf.json_format import MessageToJson
 # load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__)
-file = None
 objects_annotations = []
 
 # Gets credentials
@@ -39,7 +38,7 @@ def index():
 
 @app.route('/image', methods=['GET', 'POST'])
 def vision_api():
-	global file, objects_annotations
+	global objects_annotations
 	if request.method == 'POST':
 		file = request.files['file']
 		content = file.read()
@@ -53,8 +52,9 @@ def vision_api():
 
 @app.route('/rectangles', methods=['GET', 'POST'])
 def draw_rect():
-	global file, objects_annotations
+	global objects_annotations
 	if request.method == 'POST':
+		file = request.files['file']
 		rect_draw = RectangleDraw()
 		return rect_draw.draw_rectangles(file, objects_annotations)
 	return redirect(url_for("index"))

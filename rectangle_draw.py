@@ -23,6 +23,8 @@ class RectangleDraw:
         # Converts the image to bytes and returns it
         result = io.BytesIO()
         image.save(result, 'JPEG', quality=90)
+        image.close()
         result.seek(0, 0)
-
+        
+        
         return b64encode(result.getvalue())

@@ -29,7 +29,6 @@ $("#default-upload-btn").on("change", function() {
         // Submit form
         //uploadForm.submit();
         makeVisionAPIRequest();
-        makeDrawRectanglesRequest();
     }
     else {
         $("#custom-upload-text").html("No file chosen");
@@ -46,6 +45,7 @@ function makeVisionAPIRequest() {
         data: formData,
         contentType: false,
         processData: false,
+        
         success: function(response) {
             $("#items-list").html("");
             response = JSON.parse(response);
@@ -58,6 +58,7 @@ function makeVisionAPIRequest() {
                 $("#items-list").append("<li>" + detectedObjects[i]["name"] + " " + 
                                         Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
             }
+            makeDrawRectanglesRequest(formData);
         },
         error: function(err) {
             console.log(err);
@@ -65,11 +66,14 @@ function makeVisionAPIRequest() {
     });
 }
 
-function makeDrawRectanglesRequest() {
+function makeDrawRectanglesRequest(formData) {
     $.ajax({
         type: "POST",
         url: "/rectangles",
-
+        data: formData,
+        contentType: false,
+        processData: false,
+        
         success: function(response) {
             console.log(response);
             // Maybe hide original image and display new one for whatever reason
