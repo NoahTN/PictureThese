@@ -16,6 +16,7 @@ body {
     padding-left: 10px;
     vertical-align: top;
     display: inline-block;
+    text-align: center;
 }
 
 #input-div {
@@ -23,32 +24,44 @@ body {
     margin-bottom: 20px;
 }
 
+#lang-div {
+    font-size: 16px;
+}
+
+#languages {
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+#languages option {
+    font-size: 16px;
+}
+
 #words-div {
     border: 1px dashed blue;
     vertical-align: top;
     display: none;
-    padding: 5px;
-    width: 100%;
+    width: 90%;
 }
 
 #custom-upload-btn {
     padding: 10px;
+    margin-top: 10px;
     color: white;
-    background-color: green;
+    background-color: #6879D3;
     border: 1px solid black;
+    font-size: 24px;
+    width: 90%;
     border-radius: 5px;
     cursor: pointer;
-    right: 100px;
+    text-align: center;
 }
 
 #custom-upload-btn:hover {
-    background-color: greenyellow;
+    background-color: #4590E1;
 }
 
 #custom-upload-text {
-    right: 100px;
-    
+    font-size: 20px;
 }
-#lang-div{
-    right: 60px;
-}
+

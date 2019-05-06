@@ -73,7 +73,6 @@ function makeDrawRectanglesRequest(formData) {
         processData: false,
         
         success: function(response) {
-            console.log(response);
             // Maybe hide original image and display new one for whatever reason
             $("#uploaded-img").attr("src", "data:image/jpg;base64," + response);
         },
