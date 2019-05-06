@@ -49,7 +49,7 @@ class RectangleDraw:
                                 if compare_object.name in name:
                                     name += "/" + _object.name
                                     names[n_count] = name
-                                    break;
+                                    break
 
                                 n_count += 1
                         object_found = True
