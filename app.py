@@ -1,7 +1,8 @@
 import io
 import os
 import json
-from flask import Flask, render_template, request, redirect, jsonify, url_for
+from rectangle_draw import RectangleDraw
+from flask import Flask, render_template, request, redirect, jsonify, url_for, make_response
 from werkzeug import secure_filename
 from google.oauth2 import service_account
 from google.cloud import vision
@@ -17,6 +18,8 @@ from google.protobuf.json_format import MessageToJson
 # load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__)
+file = None
+objects_annotations = []
 
 # Gets credentials
 # May have to comment out to get to work locally
@@ -36,15 +39,24 @@ def index():
 
 @app.route('/image', methods=['GET', 'POST'])
 def vision_api():
+	global file, objects_annotations
 	if request.method == 'POST':
-		f = request.files['file']
-		content = f.read()
+		file = request.files['file']
+		content = file.read()
 		# Reads in image to object
 		image = types.Image(content=content)
 		# Performs object detection on the image
 		objects = vision_client.object_localization(image=image)
-
+		objects_annotations = objects.localized_object_annotations
 		return MessageToJson(objects)
+	return redirect(url_for("index"))
+
+@app.route('/rectangles', methods=['GET', 'POST'])
+def draw_rect():
+	global file, objects_annotations
+	if request.method == 'POST':
+		rect_draw = RectangleDraw()
+		return rect_draw.draw_rectangles(file, objects_annotations)
 	return redirect(url_for("index"))
 
 @app.route('/language', methods=['GET', 'POST'])

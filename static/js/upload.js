@@ -29,6 +29,7 @@ $("#default-upload-btn").on("change", function() {
         // Submit form
         //uploadForm.submit();
         makeVisionAPIRequest();
+        makeDrawRectanglesRequest();
     }
     else {
         $("#custom-upload-text").html("No file chosen");
@@ -46,7 +47,6 @@ function makeVisionAPIRequest() {
         contentType: false,
         processData: false,
         success: function(response) {
-            console.log(response);
             $("#items-list").html("");
             response = JSON.parse(response);
             detectedObjects = response["localizedObjectAnnotations"];
@@ -58,6 +58,22 @@ function makeVisionAPIRequest() {
                 $("#items-list").append("<li>" + detectedObjects[i]["name"] + " " + 
                                         Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
             }
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+
+function makeDrawRectanglesRequest() {
+    $.ajax({
+        type: "POST",
+        url: "/rectangles",
+
+        success: function(response) {
+            console.log(response);
+            // Maybe hide original image and display new one for whatever reason
+            $("#uploaded-img").attr("src", "data:image/jpg;base64," + response);
         },
         error: function(err) {
             console.log(err);
