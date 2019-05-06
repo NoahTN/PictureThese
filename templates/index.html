@@ -2,28 +2,34 @@
 <html>
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src={{ url_for('static', filename='js/upload.js') }}></script>
         <title>Image Translator</title>
     </head>
     <body>
-        <h1>INSERT COOL LOGO HERE</h1>
+        <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="site logo"/> 
         <!--Image Display and where the User will interact-->
         <div id="image-div">
-            <!--Next Line is the New Image-->
-            <img src="data:image/png">
             <img id="uploaded-img">
             <div id="items-div">
-                <ul>
-                    <li>Potato</li>
-                    <li>Hamburger</li>
-                    <li>Video Games</li>
-                </ul>
+                English
+                <ul id="items-list"></ul>
+                <br/><br/>
+                <span id="selected-language"></span>
+                <ul id="translated-list"></ul>
             </div>
         </div>
           <!--Select the language to translate to -->
         <div id="lang-div">
             Translate to
-            <select>
-                <option>English</option>
+            <select id="languages">
+                {%  for language in languages %}
+                    {%  if language.name == "English" %}
+                        <option selected value={{ language.language }}> {{ language.name }} </option>
+                    {% else %}
+                         <option value={{ language.language }}> {{ language.name }} </option>
+                    {% endif %}
+                {%  endfor %}
             </select>
         </div>
         <!--File Upload Button-->
@@ -32,7 +38,5 @@
             <button type="button" id="custom-upload-btn">Upload File</button>
         </form>
         <span id="custom-upload-text">No file chosen</span>
-        <!--<p id="test-text"></p>-->
-        <script src={{ url_for('static', filename='js/upload.js') }}></script>
     </body>
 </html>

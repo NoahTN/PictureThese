@@ -1,51 +1,112 @@
-const defaultUploadBtn = document.getElementById("default-upload-btn");
-const customUploadBtn = document.getElementById("custom-upload-btn");
-const customUploadText = document.getElementById("custom-upload-text");
-const imageDiv = document.getElementById("image-div");
-const image = document.getElementById("uploaded-img");
-const itemsDiv = document.getElementById("items-div");
-const uploadForm = document.getElementById("upload-form");
-const testText = document.getElementById("test-text");
+$(document).ready(function() {
 
+var language = "en";
+var detectedObjects = [];
 
+$("#languages").on("change", function() {
+    language = $("#languages option:selected").val();
+    $("#selected-language").html($("#languages option:selected").text());
 
-customUploadBtn.addEventListener("click", function() {
-    defaultUploadBtn.value = "";
-    defaultUploadBtn.click();
+    // make sure that a file has been uploaded before making api call
+    if($("#default-upload-btn").val()) {
+        makeTranslateAPIRequest(detectedObjects);
+    }
 });
 
-defaultUploadBtn.addEventListener("change", function() {
-    if(defaultUploadBtn.value) {
+$("#custom-upload-btn").on("click", function() {
+    $("#default-upload-btn").val("");
+    $("#default-upload-btn").click();
+});
+
+$("#default-upload-btn").on("change", function() {
+    if($("#default-upload-btn").val()) {
         // Make image-div visible and display the image
-        imageDiv.style.display = "block";
-        image.src = URL.createObjectURL(defaultUploadBtn.files[0]);
-        image.style.width = "75%";
+        $("#image-div").css("display", "block");
+        $("#uploaded-img").attr("src", URL.createObjectURL($("#default-upload-btn").prop("files")[0]));
+        $("#uploaded-img").css("width", "75%");
         // Write the filename to customm-upload-text
-        customUploadText.innerHTML = defaultUploadBtn.value.split("\\").pop();
+        $("#custom-upload-text").html($("#default-upload-btn").val().split("\\").pop());
         // Submit form
         //uploadForm.submit();
         makeVisionAPIRequest();
     }
     else {
-        customUploadText.innerHTML = "No file chosen";
+        $("#custom-upload-text").html("No file chosen");
     }
 });
 
 function makeVisionAPIRequest() {
-    var formData = new FormData(),
-    file = defaultUploadBtn.files[0];
-    xhr = new XMLHttpRequest();
+    var formData = new FormData();
+    formData.append("file", $("#default-upload-btn").prop("files")[0]);
 
-    formData.append('file', file);
-    xhr.open('POST', '/image');
-    xhr.send(formData);
-    // Call a function when the state changes.
-    xhr.onreadystatechange = function() { 
-        // TO IMPLEMENT: Request Loading
+    $.ajax({
+        type: "POST",
+        url: "/image",
+        data: formData,
+        contentType: false,
+        processData: false,
         
-        // Request Finsihed
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            testText.innerHTML = xhr.responseText;
+        success: function(response) {
+            $("#items-list").html("");
+            response = JSON.parse(response);
+            detectedObjects = response["localizedObjectAnnotations"];
+            if(language !== "en") {
+                makeTranslateAPIRequest(detectedObjects);
+            }
+
+            for(var i = 0; i < detectedObjects.length; ++i) {
+                $("#items-list").append("<li>" + detectedObjects[i]["name"] + " " + 
+                                        Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
+            }
+            makeDrawRectanglesRequest(formData);
+        },
+        error: function(err) {
+            console.log(err);
         }
-    }
+    });
 }
+
+function makeDrawRectanglesRequest(formData) {
+    $.ajax({
+        type: "POST",
+        url: "/rectangles",
+        data: formData,
+        contentType: false,
+        processData: false,
+        
+        success: function(response) {
+            console.log(response);
+            // Maybe hide original image and display new one for whatever reason
+            $("#uploaded-img").attr("src", "data:image/jpg;base64," + response);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+
+function makeTranslateAPIRequest(words) {
+    var myData = {
+        "language": language,
+        "words": words
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/language",
+        contentType: "application/json",
+        data: JSON.stringify(myData),
+        dataType: "json",
+        success: function(response) {
+            $("#translated-list").html("");
+            for(var i = 0; i < detectedObjects.length; ++i) {
+                $("#translated-list").append("<li>" + response["data"]["translated"][i]["translatedText"] + " " + 
+                                             Math.round(response["data"]["words"][i]["score"] * 100) + "%</li>");             
+            }
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+});
