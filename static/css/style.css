@@ -8,15 +8,27 @@ body {
     width: 50%;
 }
 
-#image-div {
-    display: none;
+#uploaded-image {
+    display:inline-block;
 }
 
-#items-div {
-    border: 1px dashed blue;
-    display: inline-block;
+#wrapper {
+    padding-left: 10px;
     vertical-align: top;
+    display: inline-block;
+}
+
+#input-div {
+    display:inline-block;
+    margin-bottom: 20px;
+}
+
+#words-div {
+    border: 1px dashed blue;
+    vertical-align: top;
+    display: none;
     padding: 5px;
+    width: 100%;
 }
 
 #custom-upload-btn {
@@ -26,6 +38,7 @@ body {
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
+    right: 100px;
 }
 
 #custom-upload-btn:hover {
@@ -33,5 +46,9 @@ body {
 }
 
 #custom-upload-text {
+    right: 100px;
     
+}
+#lang-div{
+    right: 60px;
 }

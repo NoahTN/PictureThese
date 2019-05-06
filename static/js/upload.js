@@ -20,15 +20,13 @@ $("#custom-upload-btn").on("click", function() {
 
 $("#default-upload-btn").on("change", function() {
     if($("#default-upload-btn").val()) {
-        // Make image-div visible and display the image
-        $("#image-div").css("display", "block");
+        makeVisionAPIRequest();
+        // Make words-div visible and display the image
+        $("#words-div").css("display", "inline-block");
         $("#uploaded-img").attr("src", URL.createObjectURL($("#default-upload-btn").prop("files")[0]));
-        $("#uploaded-img").css("width", "75%");
+        $("#uploaded-img").css("width", "60%");
         // Write the filename to customm-upload-text
         $("#custom-upload-text").html($("#default-upload-btn").val().split("\\").pop());
-        // Submit form
-        //uploadForm.submit();
-        makeVisionAPIRequest();
     }
     else {
         $("#custom-upload-text").html("No file chosen");
@@ -47,7 +45,7 @@ function makeVisionAPIRequest() {
         processData: false,
         
         success: function(response) {
-            $("#items-list").html("");
+            $("#words-list").html("");
             response = JSON.parse(response);
             detectedObjects = response["localizedObjectAnnotations"];
             if(language !== "en") {
@@ -55,7 +53,7 @@ function makeVisionAPIRequest() {
             }
 
             for(var i = 0; i < detectedObjects.length; ++i) {
-                $("#items-list").append("<li>" + detectedObjects[i]["name"] + " " + 
+                $("#words-list").append("<li>" + detectedObjects[i]["name"] + " " + 
                                         Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
             }
             makeDrawRectanglesRequest(formData);

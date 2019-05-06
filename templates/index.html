@@ -4,41 +4,43 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script src={{ url_for('static', filename='js/upload.js') }}></script>
-        <title>Image Translator</title>
+        <title>PictureThese</title>
     </head>
     <body>
         <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="site logo"/> 
+        <br><br>
         <!--Image Display and where the User will interact-->
-        <div id="image-div">
-            <img id="uploaded-img">
-            <div id="items-div">
+        <img id="uploaded-img">
+        <div id="wrapper">
+            <div id="input-div">
+                <!--Select the language to translate to -->
+                <div id="lang-div">
+                    Translate to
+                    <select id="languages">
+                        {%  for language in languages %}
+                            {%  if language.name == "English" %}
+                                <option selected value={{ language.language }}> {{ language.name }} </option>
+                            {% else %}
+                                    <option value={{ language.language }}> {{ language.name }} </option>
+                            {% endif %}
+                        {%  endfor %}
+                    </select>
+                </div>
+                <!--File Upload Button-->
+                <form id="upload-form" action='/image' method="POST" enctype = "multipart/form-data">
+                    <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
+                    <button type="button" id="custom-upload-btn">Upload File</button>
+                </form>
+                <span id="custom-upload-text">No file chosen</span>
+            </div>
+            <br>
+            <div id="words-div">
                 English
-                <ul id="items-list"></ul>
+                <ul id="words-list"></ul>
                 <br/><br/>
                 <span id="selected-language"></span>
                 <ul id="translated-list"></ul>
             </div>
         </div>
-          <!--Select the language to translate to -->
-        <div id="lang-div">
-            Translate to
-            <select id="languages">
-                {%  for language in languages %}
-                    {%  if language.name == "English" %}
-                        <option selected value={{ language.language }}> {{ language.name }} </option>
-                    {% else %}
-                         <option value={{ language.language }}> {{ language.name }} </option>
-                    {% endif %}
-                {%  endfor %}
-            </select>
-        </div>
-        <!--File Upload Button-->
-        <form id="upload-form" action='/image' method="POST" enctype = "multipart/form-data">
-            <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
-            <button type="button" id="custom-upload-btn">Upload File</button>
-        </form>
-        <span id="custom-upload-text">No file chosen</span>
-
-
     </body>
 </html>
