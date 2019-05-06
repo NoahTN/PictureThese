@@ -4,6 +4,10 @@ body {
     color: white;
 }
 
+#logo {
+    width: 50%;
+}
+
 #image-div {
     display: none;
 }
@@ -13,6 +17,7 @@ body {
     display: inline-block;
     vertical-align: top;
     padding: 5px;
+    
 }
 
 #custom-upload-btn {
@@ -22,6 +27,8 @@ body {
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
+    position: absolute;
+    right: 100px;
 }
 
 #custom-upload-btn:hover {
@@ -29,5 +36,21 @@ body {
 }
 
 #custom-upload-text {
+    position: absolute;
+    right: 100px;
     
+}
+#lang-div{
+    position: absolute;
+    right: 60px;
+}
+
+p{
+    position: absolute;
+    right: 20px;
+    background: rgb(68, 65, 65);
+    border: 5px solid rgb(48, 47, 47);
+    padding: 20px;
+    margin:10px;
+    text-align: justify
 }
