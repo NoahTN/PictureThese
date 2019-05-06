@@ -24,11 +24,13 @@ class RectangleDraw:
     def draw_rectangles(self, file, objects):
         image = Image.open(file)
         draw = ImageDraw.Draw(image)
+        bounds = []
         names = []
 
         # Get rectangle coordinate for each detected object
         for _object in objects:
-            bounds = [(vertex.x * image.width, vertex.y * image.height) for vertex in _object.bounding_poly.normalized_vertices]
+            for vertex in _object.bounding_poly.normalized_vertices:
+                bounds.append((vertex.x * image.width, vertex.y * image.height))
 
             # Adds name to list if list is empty
             if len(names) == 0:
