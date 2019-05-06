@@ -74,5 +74,6 @@ def translate_api():
 
 		return jsonify(status="success", data=data)
 	return redirect(url_for("index"))
+	
 if __name__ == '__main__':
 	app.run()
