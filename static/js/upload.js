@@ -19,12 +19,14 @@ $("#custom-upload-btn").on("click", function() {
 });
 
 $("#default-upload-btn").on("change", function() {
+    $("#image-div").css("display", "inline-block");
+    $("#words-div").css("display", "none");
+    $("#uploaded-img").css("filter", "blur(3px)")
+    
     if($("#default-upload-btn").val()) {
         makeVisionAPIRequest();
-        // Make words-div visible and display the image
-        $("#words-div").css("display", "inline-block");
+            
         $("#uploaded-img").attr("src", URL.createObjectURL($("#default-upload-btn").prop("files")[0]));
-        $("#uploaded-img").css("width", "60%");
         // Write the filename to customm-upload-text
         $("#custom-upload-text").html($("#default-upload-btn").val().split("\\").pop());
     }
@@ -36,6 +38,7 @@ $("#default-upload-btn").on("change", function() {
 function makeVisionAPIRequest() {
     var formData = new FormData();
     formData.append("file", $("#default-upload-btn").prop("files")[0]);
+    $('#loading-spinner').addClass('spinner');
 
     $.ajax({
         type: "POST",
@@ -44,11 +47,16 @@ function makeVisionAPIRequest() {
         contentType: false,
         processData: false,
         dataType: "json",
-        
+
         success: function(response) {
-            
+            $('#loading-spinner').removeClass('spinner');
             $("#words-list").html("");
             detectedObjects = JSON.parse(response.detected)["localizedObjectAnnotations"];
+            if(detectedObjects.length > 0) {
+                $("#words-div").css("display", "inline-block");
+                $("#uploaded-img").css("filter", "none")
+            }
+            
             if(language !== "en") {
                 makeTranslateAPIRequest(detectedObjects);
             }

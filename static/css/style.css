@@ -8,8 +8,33 @@ body {
     width: 50%;
 }
 
+#image-div {
+    position: relative;
+    display: none;
+    border: 1px solid white;
+}
+
 #uploaded-image {
     display:inline-block;
+    width: 70%;
+}
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
+   
+.spinner:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    margin-left: -100px;
+    border-radius: 50%;
+    border: 8px solid #cccccc;
+    border-top-color: #6879D3;
+    animation: spinner .6s linear infinite;
 }
 
 #wrapper {

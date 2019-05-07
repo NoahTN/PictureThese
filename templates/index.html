@@ -10,7 +10,11 @@
         <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="site logo"/> 
         <br><br>
         <!--Image Display and where the User will interact-->
-        <img id="uploaded-img">
+        <div id="image-div">
+            <img id="uploaded-img">
+            <div id="loading-spinner"></div>
+        </div>
+        
         <div id="wrapper">
             <div id="input-div">
                 <!--Select the language to translate to -->
