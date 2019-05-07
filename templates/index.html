@@ -4,58 +4,48 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script src={{ url_for('static', filename='js/upload.js') }}></script>
-        <title>Picture These
-
-        </title>
+        <title>PictureThese</title>
     </head>
     <body>
         <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="site logo"/> 
+        <br><br>
         <!--Image Display and where the User will interact-->
-        <div id="image-div">
-            <img id="uploaded-img">
-            <br/><br/>
-            <div id="items-div">
+        <img id="uploaded-img">
+        <div id="wrapper">
+            <div id="input-div">
+                <!--Select the language to translate to -->
+                <div id="lang-div">
+                    Translate to
+                    <select id="languages">
+                        {%  for language in languages %}
+                            {%  if language.name == "English" %}
+                                <option selected value={{ language.language }}> {{ language.name }} </option>
+                            {% else %}
+                                    <option value={{ language.language }}> {{ language.name }} </option>
+                            {% endif %}
+                        {%  endfor %}
+                    </select>
+                </div>
+                <!--File Upload Button-->
+                <form id="upload-form" action='/image' method="POST" enctype = "multipart/form-data">
+                    <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
+                    <button type="button" id="custom-upload-btn">Upload File</button>
+                </form>
+                <span id="custom-upload-text">No file chosen</span>
+            </div>
+            <br>
+            <p>
+                Welcome to our website Picture These. Here we analyze images and specify the contents that are contained    
+                in those images, which can be translated in any of the chosen languages. If you would like to have an image of yours analyzed feel free to 
+                upload that image by clicking the “Upload File” button and choose your desired language; then we will take it from there!
+            </p>
+            <div id="words-div">
                 English
-                <ul id="items-list"></ul>
+                <ul id="words-list"></ul>
                 <br/><br/>
                 <span id="selected-language"></span>
                 <ul id="translated-list"></ul>
             </div>
         </div>
-          <!--Select the language to translate to -->
-        <div id="lang-div">
-            Translate to
-            <select id="languages">
-                {%  for language in languages %}
-                    {%  if language.name == "English" %}
-                        <option selected value={{ language.language }}> {{ language.name }} </option>
-                    {% else %}
-                         <option value={{ language.language }}> {{ language.name }} </option>
-                    {% endif %}
-                {%  endfor %}
-            </select>
-        </div>
-        <br><br/>
-        <br><br/>
-        <!--File Upload Button-->
-        <form id="upload-form" action='/image' method="POST" enctype = "multipart/form-data">
-            <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
-            <button type="button" id="custom-upload-btn">Upload File</button>
-        </form>
-        <br/><br/>
-        <span id="custom-upload-text">No file chosen</span>
-        <br><br/>
-        <p>We should put some kind of text here welcoming the user and explaining what the project does.</p>
-
-
-    </body>
-</html>pe = "multipart/form-data">
-            <input name="file" type="file" id="default-upload-btn" accept="image/*" hidden="hidden"/>
-            <button type="button" id="custom-upload-btn">Upload File</button>
-        </form>
-        <span id="custom-upload-text">No file chosen</span>
-        <p id="test-text"></p>
-        <script src={{ url_for('static', filename='js/upload.js') }}></script>
-
     </body>
 </html>
