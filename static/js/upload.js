@@ -43,11 +43,12 @@ function makeVisionAPIRequest() {
         data: formData,
         contentType: false,
         processData: false,
+        dataType: "json",
         
         success: function(response) {
+            
             $("#words-list").html("");
-            response = JSON.parse(response);
-            detectedObjects = response["localizedObjectAnnotations"];
+            detectedObjects = JSON.parse(response.detected)["localizedObjectAnnotations"];
             if(language !== "en") {
                 makeTranslateAPIRequest(detectedObjects);
             }
@@ -56,25 +57,8 @@ function makeVisionAPIRequest() {
                 $("#words-list").append("<li>" + detectedObjects[i]["name"] + " " + 
                                         Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
             }
-            makeDrawRectanglesRequest(formData);
-        },
-        error: function(err) {
-            console.log(err);
-        }
-    });
-}
-
-function makeDrawRectanglesRequest(formData) {
-    $.ajax({
-        type: "POST",
-        url: "/rectangles",
-        data: formData,
-        contentType: false,
-        processData: false,
-        
-        success: function(response) {
-            // Maybe hide original image and display new one for whatever reason
-            $("#uploaded-img").attr("src", "data:image/jpg;base64," + response);
+            // Update image to annotated version
+            $("#uploaded-img").attr("src", "data:image/jpg;base64," + response.byte_image);
         },
         error: function(err) {
             console.log(err);

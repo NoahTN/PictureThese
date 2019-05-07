@@ -18,7 +18,6 @@ from google.protobuf.json_format import MessageToJson
 # load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__)
-objects_annotations = []
 
 # Gets credentials
 # May have to comment out to get to work locally
@@ -27,9 +26,9 @@ service_account_info = json.loads(credentials_raw)
 credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
 # Vision client
-vision_client = vision.ImageAnnotatorClient()
+vision_client = vision.ImageAnnotatorClient(credentials=credentials)
 # Translate client
-translate_client = translate.Client()
+translate_client = translate.Client(credentials=credentials)
 languages = translate_client.get_languages()
 
 @app.route('/')
@@ -38,7 +37,6 @@ def index():
 
 @app.route('/image', methods=['GET', 'POST'])
 def vision_api():
-	global objects_annotations
 	if request.method == 'POST':
 		file = request.files['file']
 		content = file.read()
@@ -46,17 +44,11 @@ def vision_api():
 		image = types.Image(content=content)
 		# Performs object detection on the image
 		objects = vision_client.object_localization(image=image)
-		objects_annotations = objects.localized_object_annotations
-		return MessageToJson(objects)
-	return redirect(url_for("index"))
-
-@app.route('/rectangles', methods=['GET', 'POST'])
-def draw_rect():
-	global objects_annotations
-	if request.method == 'POST':
-		file = request.files['file']
 		rect_draw = RectangleDraw()
-		return rect_draw.draw_rectangles(file, objects_annotations)
+		byte_image =  rect_draw.draw_rectangles(file, objects.localized_object_annotations)
+		return jsonify(detected=MessageToJson(objects), byte_image=byte_image.decode('ascii'))
+		
+
 	return redirect(url_for("index"))
 
 @app.route('/language', methods=['GET', 'POST'])
