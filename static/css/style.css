@@ -8,48 +8,69 @@ body {
     width: 50%;
 }
 
-#image-div {
-    display: none;
+#uploaded-image {
+    display:inline-block;
 }
 
-#items-div {
-    border: 1px dashed blue;
-    display: inline-block;
+#wrapper {
+    padding-left: 10px;
     vertical-align: top;
-    padding: 5px;
-    
+    display: inline-block;
+    text-align: center;
+}
+
+#input-div {
+    display:inline-block;
+    margin-bottom: 20px;
+}
+
+#lang-div {
+    font-size: 16px;
+}
+
+#languages {
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+#languages option {
+    font-size: 16px;
+}
+
+#words-div {
+    border: 1px dashed blue;
+    vertical-align: top;
+    display: none;
+    width: 90%;
 }
 
 #custom-upload-btn {
     padding: 10px;
+    margin-top: 10px;
     color: white;
-    background-color: green;
+    background-color: #6879D3;
     border: 1px solid black;
+    font-size: 24px;
+    width: 90%;
     border-radius: 5px;
     cursor: pointer;
-    position: absolute;
-    right: 100px;
+    text-align: center;
 }
 
 #custom-upload-btn:hover {
-    background-color: greenyellow;
+    background-color: #4590E1;
 }
 
 #custom-upload-text {
-    position: absolute;
-    right: 100px;
-    
-}
-#lang-div{
-    position: absolute;
-    right: 60px;
+    font-size: 20px;
 }
 
 p{
     position: absolute;
     right: 20px;
     background: rgb(68, 65, 65);
-    border: 5px solid rgb(48, 47, 47);
+    border: 5px solid #6879D3;
+    font-size: 30px;
     padding: 20px;
     margin:10px;
     text-align: justify
