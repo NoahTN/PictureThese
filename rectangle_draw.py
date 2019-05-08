@@ -1,6 +1,6 @@
 import io
 from base64 import b64encode
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from flask import Flask, send_file
 
 class RectangleDraw:
@@ -26,6 +26,9 @@ class RectangleDraw:
         draw = ImageDraw.Draw(image)
         bounds = []
         names = []
+
+        # Sets up font of text drawn on the image and sets the fontsize based off image width
+        fnt = ImageFont.truetype('Static/fonts/font.ttf', int(image.width * 0.04))
 
         # Get rectangle coordinate for each detected object
         for _object in objects:
@@ -65,7 +68,7 @@ class RectangleDraw:
         for i in range(0, len(bounds), 4):
             draw.rectangle([(bounds[i][0], bounds[i][1]), (bounds[i+2][0], bounds[i+2][1])], fill=None, outline="blue")
             if name_count < len(names):
-                draw.text((bounds[i][0] + 2, bounds[i][1] + 1), names[name_count], fill=(10,10,10,255))
+                draw.text((bounds[i][0] + 2, bounds[i][1] - 1), names[name_count], font=fnt, fill=(10,10,10,255))
             name_count += 1
         # Free up memory
         del draw
