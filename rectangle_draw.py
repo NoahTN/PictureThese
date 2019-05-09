@@ -28,7 +28,7 @@ class RectangleDraw:
         names = []
 
         # Sets up font of text drawn on the image and sets the fontsize based off image width
-        fnt = ImageFont.truetype('Static/fonts/font.ttf', int(image.width * 0.04))
+        fnt = ImageFont.truetype('static/fonts/boringboron.ttf', int(image.width * 0.04))
 
         # Get rectangle coordinate for each detected object
         for _object in objects:
