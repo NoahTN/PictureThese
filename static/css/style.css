@@ -1,7 +1,13 @@
+@font-face {
+    font-family: "IBM Plex Sans";
+    src: url(../fonts/IBMPlexSans-Regular.woff);
+}
+
 body {
     text-align: center;
     background-color:#272727;
     color: white;
+    font-family: "IBM Plex Sans"
 }
 
 #logo {
@@ -11,7 +17,6 @@ body {
 #image-div {
     position: relative;
     display: none;
-    border: 1px solid white;
 }
 
 #uploaded-image {
@@ -63,7 +68,7 @@ body {
 }
 
 #words-div {
-    border: 1px dashed blue;
+    border: 1px dashed #6879D3;
     vertical-align: top;
     display: none;
     width: 90%;
@@ -88,5 +93,18 @@ body {
 
 #custom-upload-text {
     font-size: 20px;
+}
+
+#about-div {
+    display:inline-block;
+    width: 55%;
+    background: rgb(68, 65, 65);
+    border: 5px solid;
+    border-image-source: linear-gradient(45deg, #BF3EAC, #6879D3);
+    border-image-slice: 1;
+    font-size: 18px;
+    padding: 0px 20px 10px 20px;
+    margin: 10px;
+    text-align: justify;
 }
 
