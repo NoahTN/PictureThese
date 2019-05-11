@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-$("body").css("font-family", "IBM Plex Sans");
-
 var language = "en";
 var detectedObjects = [];
 
