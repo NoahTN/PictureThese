@@ -7,7 +7,6 @@ body {
     text-align: center;
     background-color:#272727;
     color: white;
-    font-family: "IBM Plex Sans"
 }
 
 #logo {
@@ -17,11 +16,12 @@ body {
 #image-div {
     position: relative;
     display: none;
+    width: 45%;
 }
 
-#uploaded-image {
+#uploaded-img {
     display:inline-block;
-    width: 70%;
+    width: 100%;
 }
 
 @keyframes spinner {
@@ -43,10 +43,11 @@ body {
 }
 
 #wrapper {
-    padding-left: 10px;
+    padding-left: 20px;
     vertical-align: top;
     display: inline-block;
     text-align: center;
+    width: 30%;
 }
 
 #input-div {
@@ -68,10 +69,56 @@ body {
 }
 
 #words-div {
-    border: 1px dashed #6879D3;
+    
     vertical-align: top;
     display: none;
-    width: 90%;
+    float: left;
+    text-align: left;
+}
+
+.word-item {
+    white-space: nowrap;
+    display: inline-block;
+    margin-bottom: 10px;
+    border: 2px solid white;
+    border-radius: 3px;
+}
+
+.confidence-text {
+    padding: 5px 10px 5px 10px;
+    display:inline-block;
+    font-size: 32px;
+    vertical-align: center;
+    text-align: center;
+}
+
+.high-confidence {
+    background-color: #14a76c;
+}
+
+.mid-confidence {
+    background-color: orange;
+}
+
+.low-confidence {
+    background-color: #ff652f;
+}
+
+.original-text {
+    padding: 5px 10px 5px 10px;
+    display:inline-block;
+}
+
+.translated-text {
+    background-color: #6879D3;
+    display: none;
+}
+
+.original-text, .translated-text {
+    font-size: 32px;
+    vertical-align: top;
+    text-align: center;
+    padding: 5px 10px 5px 10px;
 }
 
 #custom-upload-btn {

@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+$("body").css("font-family", "IBM Plex Sans");
+
 var language = "en";
 var detectedObjects = [];
 
@@ -9,7 +11,10 @@ $("#languages").on("change", function() {
 
     // make sure that a file has been uploaded before making api call
     if($("#default-upload-btn").val()) {
-        makeTranslateAPIRequest(detectedObjects);
+        if(language !== "en")
+            makeTranslateAPIRequest(detectedObjects);
+        else 
+            $(".translated-text").css("display", "none");
     }
 });
 
@@ -24,6 +29,7 @@ $("#default-upload-btn").on("change", function() {
     $("#uploaded-img").css("filter", "blur(3px)")
     
     if($("#default-upload-btn").val()) {
+        $("#input-div").css("float", "left");
         makeVisionAPIRequest();
             
         $("#uploaded-img").attr("src", URL.createObjectURL($("#default-upload-btn").prop("files")[0]));
@@ -50,21 +56,40 @@ function makeVisionAPIRequest() {
 
         success: function(response) {
             $('#loading-spinner').removeClass('spinner');
-            $("#words-list").html("");
+            $("#words-div").html("");
+
             detectedObjects = JSON.parse(response.detected)["localizedObjectAnnotations"];
             if(detectedObjects.length > 0) {
                 $("#words-div").css("display", "inline-block");
                 $("#uploaded-img").css("filter", "none")
             }
-            
+
+            for(var i = 0; i < detectedObjects.length; ++i) {
+                var confidence = Math.round(detectedObjects[i]["score"] * 100);
+                var confidenceClass = "low-confidence";
+                if(confidence >= 70)
+                    confidenceClass = "high-confidence";
+                else if(confidence >= 40)
+                    confidenceClass = "mid-confidence";
+
+                $("#words-div").append("<div class='word-item'>" +
+                                            `<div class='confidence-text ${confidenceClass}'></div>` +
+                                            "<div class='original-text'></div>" +
+                                        //    "<div class='divider'></div>" + 
+                                            "<div class='translated-text'></div>" +                        
+                                        "</div><br>")
+                                        
+                $('#words-div').children().eq(i*2).children().eq(0).html(confidence + "%");
+                $('#words-div').children().eq(i*2).children().eq(1).html(detectedObjects[i]["name"]);
+            }
+     
             if(language !== "en") {
                 makeTranslateAPIRequest(detectedObjects);
             }
+            else {
 
-            for(var i = 0; i < detectedObjects.length; ++i) {
-                $("#words-list").append("<li>" + detectedObjects[i]["name"] + " " + 
-                                        Math.round(detectedObjects[i]["score"] * 100) + "%</li>");
             }
+
             // Update image to annotated version
             $("#uploaded-img").attr("src", "data:image/jpg;base64," + response.byte_image);
         },
@@ -87,10 +112,9 @@ function makeTranslateAPIRequest(words) {
         data: JSON.stringify(myData),
         dataType: "json",
         success: function(response) {
-            $("#translated-list").html("");
             for(var i = 0; i < detectedObjects.length; ++i) {
-                $("#translated-list").append("<li>" + response["data"]["translated"][i]["translatedText"] + " " + 
-                                             Math.round(response["data"]["words"][i]["score"] * 100) + "%</li>");             
+                $('#words-div').children().eq(i*2).children().eq(2).html(response["data"]["translated"][i]["translatedText"]);
+                $('#words-div').children().eq(i*2).children().eq(2).css("display", "inline-block");
             }
         },
         error: function(err) {
