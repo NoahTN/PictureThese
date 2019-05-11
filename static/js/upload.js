@@ -91,7 +91,7 @@ function makeVisionAPIRequest() {
             }
 
             // Update image to annotated version
-            $("#uploaded-img").attr("src", "data:image/jpg;base64," + response.byte_image);
+            $("#uploaded-img").attr("src", "data:image/png;base64," + response.byte_image);
         },
         error: function(err) {
             console.log(err);
