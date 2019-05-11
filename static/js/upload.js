@@ -59,39 +59,35 @@ function makeVisionAPIRequest() {
             $("#words-div").html("");
 
             detectedObjects = JSON.parse(response.detected)["localizedObjectAnnotations"];
-            if(detectedObjects.length > 0) {
+
+            if(detectedObjects) {
                 $("#words-div").css("display", "inline-block");
                 $("#uploaded-img").css("filter", "none")
-            }
 
-            for(var i = 0; i < detectedObjects.length; ++i) {
-                var confidence = Math.round(detectedObjects[i]["score"] * 100);
-                var confidenceClass = "low-confidence";
-                if(confidence >= 70)
-                    confidenceClass = "high-confidence";
-                else if(confidence >= 40)
-                    confidenceClass = "mid-confidence";
-
-                $("#words-div").append("<div class='word-item'>" +
-                                            `<div class='confidence-text ${confidenceClass}'></div>` +
-                                            "<div class='original-text'></div>" +
-                                        //    "<div class='divider'></div>" + 
-                                            "<div class='translated-text'></div>" +                        
-                                        "</div><br>")
-                                        
-                $('#words-div').children().eq(i*2).children().eq(0).html(confidence + "%");
-                $('#words-div').children().eq(i*2).children().eq(1).html(detectedObjects[i]["name"]);
+                for(var i = 0; i < detectedObjects.length; ++i) {
+                    var confidence = Math.round(detectedObjects[i]["score"] * 100);
+                    var confidenceClass = "low-confidence";
+                    if(confidence >= 70)
+                        confidenceClass = "high-confidence";
+                    else if(confidence >= 40)
+                        confidenceClass = "mid-confidence";
+    
+                    $("#words-div").append("<div class='word-item'>" +
+                                                `<div class='confidence-text ${confidenceClass}'></div>` +
+                                                "<div class='original-text'></div>" +
+                                                "<div class='translated-text'></div>" +                        
+                                            "</div><br>")
+                                            
+                    $('#words-div').children().eq(i*2).children().eq(0).html(confidence + "%");
+                    $('#words-div').children().eq(i*2).children().eq(1).html(detectedObjects[i]["name"]);
+                }
+         
+                if(language !== "en") 
+                    makeTranslateAPIRequest(detectedObjects);
+                
+                // Update image to annotated version
+                $("#uploaded-img").attr("src", "data:image/png;base64," + response.byte_image);
             }
-     
-            if(language !== "en") {
-                makeTranslateAPIRequest(detectedObjects);
-            }
-            else {
-
-            }
-
-            // Update image to annotated version
-            $("#uploaded-img").attr("src", "data:image/png;base64," + response.byte_image);
         },
         error: function(err) {
             console.log(err);
