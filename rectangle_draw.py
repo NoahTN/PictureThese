@@ -28,7 +28,7 @@ class RectangleDraw:
         names = []
 
         # Sets up font of text drawn on the image and sets the fontsize based off image width
-        fnt = ImageFont.truetype('static/fonts/boringboron.ttf', int(image.width * 0.04))
+        fnt = ImageFont.truetype('static/fonts/boringboron.ttf', int(image.width * 0.045))
 
         # Get rectangle coordinate for each detected object
         for _object in objects:
@@ -66,9 +66,18 @@ class RectangleDraw:
         # Use coordinates to draw on image
         name_count = 0
         for i in range(0, len(bounds), 4):
-            draw.rectangle([(bounds[i][0], bounds[i][1]), (bounds[i+2][0], bounds[i+2][1])], fill=None, outline="blue")
+            # draw rectangle twice for thickness
+            draw.rectangle([(bounds[i][0], bounds[i][1]), (bounds[i+2][0], bounds[i+2][1])], fill=None, outline="#6879D3")
+            draw.rectangle([(bounds[i][0]-1, bounds[i][1]+1), (bounds[i+2][0]+1, bounds[i+2][1]+1)], fill=None, outline="#6879D3")
+            # draw text
             if name_count < len(names):
-                draw.text((bounds[i][0] + 2, bounds[i][1] - 1), names[name_count], font=fnt, fill=(10,10,10,255))
+                # shadow
+                draw.text((bounds[i][0] + 1, bounds[i][1] - 1), names[name_count], font=fnt, fill="white")
+                draw.text((bounds[i][0] + 3, bounds[i][1] - 1), names[name_count], font=fnt, fill="white")
+                draw.text((bounds[i][0] + 2, bounds[i][1] - 2), names[name_count], font=fnt, fill="white")
+                draw.text((bounds[i][0] + 2, bounds[i][1]), names[name_count], font=fnt, fill="white")
+                # actual text
+                draw.text((bounds[i][0] + 2, bounds[i][1] - 1), names[name_count], font=fnt, fill="#6879D3")
             name_count += 1
         # Free up memory
         del draw
