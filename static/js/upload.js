@@ -57,11 +57,23 @@ function makeVisionAPIRequest() {
             $("#words-div").html("");
 
             detectedObjects = JSON.parse(response.detected)["localizedObjectAnnotations"];
-
+        
             if(detectedObjects) {
                 $("#words-div").css("display", "inline-block");
                 $("#uploaded-img").css("filter", "none")
 
+                // get only unique object names
+                var wordSet = new Set();
+                detectedObjects = detectedObjects.filter(function(detected) {
+                    if(wordSet.has(detected["name"])) {
+                        return false;
+                    }
+                    else {
+                        wordSet.add(detected["name"]);
+                        return true;
+                    } 
+                })
+      
                 for(var i = 0; i < detectedObjects.length; ++i) {
                     var confidence = Math.round(detectedObjects[i]["score"] * 100);
                     var confidenceClass = "low-confidence";
