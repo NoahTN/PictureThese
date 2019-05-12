@@ -36,7 +36,7 @@ $("#default-upload-btn").on("change", function() {
             $("#input-div").css("float", "left");
             $("#hint-text").css("display", "inline-block");
             $("#hint-text").css("color", "white");
-            $("#hint-text").html("* Click on a word to hear it spoken");
+            $("#hint-text").html("*Confidence is represented by a percent *Click on a word to hear it spoken");
             $("#uploaded-img").attr("src", URL.createObjectURL($("#default-upload-btn").prop("files")[0]));
             
         }
