@@ -39,34 +39,55 @@ body {
     animation: spinner .6s linear infinite;
 }
 
+#error-text {
+    border: 2px solid #ff652f;
+    border-radius: 3px;
+    position: absolute;
+    color: #ff652f;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+    display: none;
+}
+
 #wrapper {
-    padding-left: 20px;
     vertical-align: top;
     display: inline-block;
     text-align: center;
-    width: 30%;
+    width: 500px;
 }
 
 #input-div {
     display:inline-block;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 #lang-div {
-    font-size: 16px;
+    white-space: nowrap;
+    font-size: 20px;
+}
+
+#credit {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.material-icons {
+    font-size: 36px;
 }
 
 #languages {
     margin-left: 5px;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 #languages option {
-    font-size: 16px;
+    font-size: 20px;
 }
 
 #words-div {
-    
     vertical-align: top;
     display: none;
     float: left;
@@ -116,11 +137,12 @@ body {
     font-size: 32px;
     vertical-align: top;
     text-align: center;
+    cursor: pointer;
     padding: 5px 10px 5px 10px;
 }
 
 #custom-upload-btn {
-    padding: 10px;
+    outline: none;
     margin-top: 10px;
     color: white;
     background-color: #6879D3;
@@ -136,7 +158,9 @@ body {
     background-color: #4590E1;
 }
 
-#custom-upload-text {
+#hint-text {
+    margin-top: 5px;
+    display: none;
     font-size: 20px;
 }
 
