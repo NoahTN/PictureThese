@@ -25,7 +25,7 @@ class RectangleDraw:
         image = Image.open(file)
         # resize image for consistency
         if image.width < 1200:
-            image = image.resize((1200, int(image.height * 1200 / image.width)), Image.LANCZOS)
+            image = image.resize((1200, int(image.height * 1200 / image.width)), Image.BILINEAR)
         draw = ImageDraw.Draw(image)
         bounds = []
         names = []
