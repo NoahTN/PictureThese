@@ -23,6 +23,9 @@ class RectangleDraw:
     '''Used to draw bounding rectangles using coordinates from the Google Vision API'''
     def draw_rectangles(self, file, objects):
         image = Image.open(file)
+        # resize image for consistency
+        if image.width < 1200:
+            image = image.resize((1200, int(image.height * 1200 / image.width)), Image.LANCZOS)
         draw = ImageDraw.Draw(image)
         bounds = []
         names = []
@@ -66,9 +69,10 @@ class RectangleDraw:
         # Use coordinates to draw on image
         name_count = 0
         for i in range(0, len(bounds), 4):
-            # draw rectangle twice for thickness
+            # draw rectangle thrice for thickness
             draw.rectangle([(bounds[i][0], bounds[i][1]), (bounds[i+2][0], bounds[i+2][1])], fill=None, outline="#6879D3")
             draw.rectangle([(bounds[i][0]-1, bounds[i][1]+1), (bounds[i+2][0]+1, bounds[i+2][1]+1)], fill=None, outline="#6879D3")
+            draw.rectangle([(bounds[i][0]-2, bounds[i][1]+2), (bounds[i+2][0]+2, bounds[i+2][1]+2)], fill=None, outline="#6879D3")
             # draw text
             if name_count < len(names):
                 # shadow

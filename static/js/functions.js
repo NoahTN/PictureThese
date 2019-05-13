@@ -65,6 +65,7 @@ function makeVisionAPIRequest() {
             }
         },
         error: function(err) {
+            $('#loading-spinner').removeClass('spinner');
             $("#error-text").html("An unexpected error occured, try again!");
             $("#error-text").css("display", "inline-block");
         }
