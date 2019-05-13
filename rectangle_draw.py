@@ -6,22 +6,6 @@ import sys
 
 
 class RectangleDraw:
-
-    # Checks both object's top left coordinates to see if they are the same object
-    def overlapping(self, _object, compare_object):
-        top_left_x = False
-        top_left_y = False
-
-        if _object.bounding_poly.normalized_vertices[0].x == compare_object.bounding_poly.normalized_vertices[0].x:
-            top_left_x = True
-        if _object.bounding_poly.normalized_vertices[0].y == compare_object.bounding_poly.normalized_vertices[0].y:
-            top_left_y = True
-
-        if top_left_x == True and top_left_y == True:
-            return True
-        else:
-            return False
-
     '''Used to draw bounding rectangles using coordinates from the Google Vision API'''
     def draw_rectangles(self, file, objects):
         image = Image.open(file)
