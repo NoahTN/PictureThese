@@ -2,11 +2,13 @@ import io
 from base64 import b64encode
 from PIL import Image, ImageDraw, ImageFont
 from flask import Flask, send_file
+import sys
+
 
 class RectangleDraw:
 
     # Checks both object's top left coordinates to see if they are the same object
-    def check_if_same_object(self, _object, compare_object):
+    def overlapping(self, _object, compare_object):
         top_left_x = False
         top_left_y = False
 
@@ -28,7 +30,7 @@ class RectangleDraw:
             image = image.resize((1200, int(image.height * 1200 / image.width)), Image.BILINEAR)
         draw = ImageDraw.Draw(image)
         bounds = []
-        names = []
+        names = {}
 
         # Sets up font of text drawn on the image and sets the fontsize based off image width
         fnt = ImageFont.truetype('static/fonts/boringboron.ttf', int(image.width * 0.045))
@@ -36,53 +38,36 @@ class RectangleDraw:
         # Get rectangle coordinate for each detected object
         for _object in objects:
             for vertex in _object.bounding_poly.normalized_vertices:
-                bounds.append((vertex.x * image.width, vertex.y * image.height))
+                bounds.append((round(vertex.x * image.width), round(vertex.y * image.height)))
+        # Combine names with overlapping corners
+        for _object in objects:
+            top_left_vertex = (round(_object.bounding_poly.normalized_vertices[0].x * image.width), round(_object.bounding_poly.normalized_vertices[0].y * image.height))
+            # if already exists and not a duplicate name
+            if top_left_vertex in names:
+                if names[top_left_vertex] != _object.name:
+                    names[top_left_vertex] += "/" + _object.name
+            else:
+                names[top_left_vertex] = _object.name
 
-            # Adds name to list if list is empty
-            if len(names) == 0:
-                names.append(_object.name)
-            else: # If the API recongizes the same thing as two different objects, it puts their names together
-                object_count = 0
-                object_found = False
-                for compare_object in objects:
-                    # Checks if current object is at the same location as any other objects
-                    if RectangleDraw().check_if_same_object(_object, compare_object):
-                        # Makes sure that the found equal object has already been added to the names list and it's not the same exact object
-                        if object_count < len(names) and _object.name != compare_object.name:
-                            n_count = 0
-                            # Looks for the correct position of the object's name in the names list
-                            for name in names:
-                                if compare_object.name in name:
-                                    name += "/" + _object.name
-                                    names[n_count] = name
-                                    break
-
-                                n_count += 1
-                        object_found = True
-
-                    object_count += 1
-
-                    # Adds the object name if no equal object was found
-                    if object_found == False:
-                        names.append(_object.name)
-
-        # Use coordinates to draw on image
-        name_count = 0
         for i in range(0, len(bounds), 4):
             # draw rectangle thrice for thickness
             draw.rectangle([(bounds[i][0], bounds[i][1]), (bounds[i+2][0], bounds[i+2][1])], fill=None, outline="#6879D3")
             draw.rectangle([(bounds[i][0]-1, bounds[i][1]+1), (bounds[i+2][0]+1, bounds[i+2][1]+1)], fill=None, outline="#6879D3")
             draw.rectangle([(bounds[i][0]-2, bounds[i][1]+2), (bounds[i+2][0]+2, bounds[i+2][1]+2)], fill=None, outline="#6879D3")
             # draw text
-            if name_count < len(names):
-                # shadow
-                draw.text((bounds[i][0] + 1, bounds[i][1] - 1), names[name_count], font=fnt, fill="white")
-                draw.text((bounds[i][0] + 3, bounds[i][1] - 1), names[name_count], font=fnt, fill="white")
-                draw.text((bounds[i][0] + 2, bounds[i][1] - 2), names[name_count], font=fnt, fill="white")
-                draw.text((bounds[i][0] + 2, bounds[i][1]), names[name_count], font=fnt, fill="white")
-                # actual text
-                draw.text((bounds[i][0] + 2, bounds[i][1] - 1), names[name_count], font=fnt, fill="#6879D3")
-            name_count += 1
+            top_left_vertex = (bounds[i][0], bounds[i][1])
+            # shadow
+            draw.text((bounds[i][0] + 1, bounds[i][1] - 1), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 3, bounds[i][1] - 1), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 2, bounds[i][1] - 2), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 2, bounds[i][1]), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 1, bounds[i][1] - 2), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 3, bounds[i][1] - 2), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 1, bounds[i][1]), names[top_left_vertex], font=fnt, fill="white")
+            draw.text((bounds[i][0] + 3, bounds[i][1]), names[top_left_vertex], font=fnt, fill="white")
+            # actual text
+            draw.text((bounds[i][0] + 2, bounds[i][1] - 1), names[top_left_vertex], font=fnt, fill="#6879D3")
+           
         # Free up memory
         del draw
 
