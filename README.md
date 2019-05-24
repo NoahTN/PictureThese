@@ -1,4 +1,4 @@
-<img src="https://github.com/NoahTolentinoNguyen/PictureThese/blob/master/static/images/logo.png"> 
+<img src="https://github.com/NoahTN/PictureThese/blob/master/static/images/logo.png"> 
 
 
 # About
